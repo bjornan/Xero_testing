@@ -5,6 +5,11 @@ using Xero_testing.Selenium.PageObjects;
 using Xero_testing.Selenium.PageObjects.Accounts;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
+using System.Collections.ObjectModel;
+using System.Collections;
+using NUnit.Framework;
+
 
 namespace Xero_testing.BDDTests
 {
@@ -13,6 +18,13 @@ namespace Xero_testing.BDDTests
     {
         IWebDriver driver;
         LoginPage loginPage;
+        InvoicesPage invoicePage;
+        NewRepeatingInvoicePage newRepeatingInvoicePage;
+        string invoiceName = "";
+        string refNumber = "123456";
+        string invoiceDueDate = "5";
+        int nrOfInvoices;
+        string description = "A description";
 
 
 
@@ -29,20 +41,36 @@ namespace Xero_testing.BDDTests
             DashBoardPage dashBoard = loginPage.ClickSave();
             dashBoard = dashBoard.topToolBar.clickDashboard();
             SalesPage salesPage = dashBoard.clickOnGoToSalesLink();
-            InvoicesPage invoicePage = salesPage.clickOnRepeating();
+            invoicePage = salesPage.clickOnRepeating();
+            nrOfInvoices = invoicePage.nrOfInvoices();
+            newRepeatingInvoicePage = invoicePage.clickNewRepeatingInvoice();
 
         }
 
         [Given(@"I have entered all required parameters")]
         public void GivenIHaveEnteredAllRequiredParameters()
         {
-            ScenarioContext.Current.Pending();
+            
+            newRepeatingInvoicePage.selectInvoiceDateToday();
+            newRepeatingInvoicePage.setDueDate(invoiceDueDate);
+            newRepeatingInvoicePage.setInvoiceTo(invoiceName);
+            newRepeatingInvoicePage.setReference(refNumber);
+            newRepeatingInvoicePage.setRandomItem();
+            newRepeatingInvoicePage.setDescription(description);
+            newRepeatingInvoicePage.setQuantity("1");
+
+            invoicePage = newRepeatingInvoicePage.clickSave();
+
+
         }
 
         [Then(@"the result should be an repeating invoice with correct data")]
         public void ThenTheResultShouldBeAnRepeatingInvoiceWithCorrectData()
         {
-            ScenarioContext.Current.Pending();
+
+            ReadOnlyCollection<IWebElement> invoiceTable = invoicePage.getInvoiceTable();
+            //Assert.AreEqual("",invoiceTable[2].)
+            Thread.Sleep(5000);
         }
     }
 }

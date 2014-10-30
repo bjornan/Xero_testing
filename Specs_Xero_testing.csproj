@@ -72,6 +72,7 @@
     <Compile Include="Selenium\PageObjects\AccountsPage.cs" />
     <Compile Include="Selenium\PageObjects\Accounts\InvoicesPage.cs" />
     <Compile Include="Selenium\PageObjects\Accounts\NewRepeatingInvoicePage.cs" />
+    <Compile Include="Selenium\PageObjects\Accounts\NewRepeatingInvoicesPopUp.cs" />
     <Compile Include="Selenium\PageObjects\Accounts\SalesPage.cs" />
     <Compile Include="Selenium\PageObjects\BasePage.cs" />
     <Compile Include="Selenium\PageObjects\DashBoardPage.cs" />
