@@ -52,7 +52,7 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
         [FindsBy(How = How.XPath, Using = "//form[@id='frmMain']//input[@id='saveAsAutoApprovedAndEmail']")]
         [CacheLookup]
         public IWebElement approveForSendingRadio;
-        //*[@id="Reference_c19e4fcbba3c4b0f819f4c3e775b0432"]
+
         [FindsBy(How = How.XPath, Using = "//form[@id='frmMain']//div[starts-with(@id, Reference)]/input")]
         [CacheLookup]
         public IWebElement reference;
