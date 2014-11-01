@@ -20,11 +20,9 @@ namespace Xero_testing.BDDTests
         LoginPage loginPage;
         InvoicesPage invoicePage;
         NewRepeatingInvoicePage newRepeatingInvoicePage;
-        string invoiceName = "";
-        string refNumber = "123456";
+        string invoiceName = "Bank West";
         string invoiceDueDate = "5";
         int nrOfInvoices;
-        string description = "A description";
 
 
 
@@ -54,23 +52,57 @@ namespace Xero_testing.BDDTests
             newRepeatingInvoicePage.selectInvoiceDateToday();
             newRepeatingInvoicePage.setDueDate(invoiceDueDate);
             newRepeatingInvoicePage.setInvoiceTo(invoiceName);
-            newRepeatingInvoicePage.setReference(refNumber);
-            newRepeatingInvoicePage.setRandomItem();
-            newRepeatingInvoicePage.setDescription(description);
-            newRepeatingInvoicePage.setQuantity("1");
+            newRepeatingInvoicePage.setSaveAsDraft();
+            newRepeatingInvoicePage.ChooseItem("BOOK");
+            //invoicePage = newRepeatingInvoicePage.clickSave();
 
+
+        }
+        [When(@"I press save")]
+        public void WhenIPressSave()
+        {
             invoicePage = newRepeatingInvoicePage.clickSave();
-
-
         }
 
         [Then(@"the result should be an repeating invoice with correct data")]
         public void ThenTheResultShouldBeAnRepeatingInvoiceWithCorrectData()
         {
-
             ReadOnlyCollection<IWebElement> invoiceTable = invoicePage.getInvoiceTable();
-            //Assert.AreEqual("",invoiceTable[2].)
+            int nrOfInvoicesAfter = invoiceTable.Count;
+            Assert.AreNotEqual(nrOfInvoices, nrOfInvoicesAfter, "Repeating invoice has not been added");
+            Assert.AreEqual(nrOfInvoices+1, nrOfInvoicesAfter,"Repeating invoice has not been added");
+            Boolean found = false;
+            int i = 0;
+            string hrefString = null;
+            string invoiceId;
+            foreach (IWebElement row in invoiceTable)
+            {
+                ReadOnlyCollection<IWebElement> cells = row.FindElements(By.TagName("td"));
+                i++;
+                if(cells[1].Text.Equals(invoiceName))
+                {
+                    found = true;
+                    hrefString = cells[1].GetAttribute("href");
+                    invoicePage.SelectInvoice(i);
+                }
+                foreach (IWebElement cell in cells)
+                {
+                    Console.WriteLine("\t" + cell.Text);
+                }
+            }
+            Assert.IsTrue(found, "Couldn't find the object");
+            //href="/RepeatTransactions/Edit.aspx?invoiceID=30997468-1b95-4948-891b-1766cfd94fec
+            if(hrefString != null)
+            {
+                int start = hrefString.IndexOf("=");
+                invoiceId = hrefString.Substring(start + 1, hrefString.Length);
+            //TODO: Call api with the invoice id....
+            }
+            
             Thread.Sleep(5000);
+            invoicePage.ClickDelete();
+
+            
         }
     }
 }

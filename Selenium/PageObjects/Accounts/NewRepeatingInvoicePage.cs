@@ -2,6 +2,8 @@
 using OpenQA.Selenium.Support.PageObjects;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 using System;
 using System.Threading;
 
@@ -50,8 +52,8 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
         [FindsBy(How = How.XPath, Using = "//form[@id='frmMain']//input[@id='saveAsAutoApprovedAndEmail']")]
         [CacheLookup]
         public IWebElement approveForSendingRadio;
-
-        [FindsBy(How = How.XPath, Using = "//form[@id='frmMain']//div[@class='controls']/input")]
+        //*[@id="Reference_c19e4fcbba3c4b0f819f4c3e775b0432"]
+        [FindsBy(How = How.XPath, Using = "//form[@id='frmMain']//div[starts-with(@id, Reference)]/input")]
         [CacheLookup]
         public IWebElement reference;
 
@@ -70,6 +72,8 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
         [FindsBy(How = How.XPath, Using = "//form[@id='frmMain']//button[@tabindex='252']")]
         [CacheLookup]
         public IWebElement saveButton;
+
+
 
 #pragma warning restore
 
@@ -118,6 +122,7 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
         }
         public void setDescription(string description)
         {
+            WaitForElementByXPath("//form[@id='frmMain']//textarea[@id='ext-comp-1002']");
             descriptionText.SendKeys(description);
         }
         public void setQuantity(string quant)
@@ -125,39 +130,20 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
             quantity.SendKeys(quant);
         }
 
-        public void setRandomItem()
+        public void ClickComboItem(IWebElement input, string target)
         {
-            //html/body/form/div[2]/div[2]/div/div[2]/div[3]/div/div/div[3]/div/div/div/div/div/div[1]/div[2]/div[1]/div[1]/table/tbody/tr/td[2]/div
+            input.Click();
+            IList<IWebElement> comboItems = driver.FindElements(By.CssSelector(".x-combo-list[style*='visibility: visible;'] .x-combo-list-item"));
+            comboItems.First(item => item.Text.Trim() == target).Click();
+        }
+        public void ChooseItem(string target)
+        {
             var element = driver.FindElement(By.XPath("//form[@id='frmMain']//table/tbody/tr/td[2]/div"));
             element.Click();
-            //html/body/form/div[2]/div[2]/div/div[2]/div[3]/div/div/div[3]/div/div/div/div/div/div[1]/div[2]/div[2]/div/img
             var elementArrow = driver.FindElement(By.XPath("//form[@id='frmMain']//div[1]/div[2]/div[2]/div/img"));
             elementArrow.Click();
-            //itemDropdown.Click();
-            //html/body/div[8]/div/div[6]
-            //foreach (string handle in WebBrowser.Current.WindowHandles)
-            //{
-            //    IWebDriver popup = driver.SwitchTo().Window(handle);
-
-            //    if (popup.Title.Contains("popup title"))
-            //    {
-            //        break;
-            //    }
-            //}
-            //html/body/div[8]/div/div
-            WaitForElementByXPath("/html/body/div[8]/div/div");
-            ReadOnlyCollection<IWebElement> selectionRows = driver.FindElements(By.XPath("/html/body/div[8]/div/div"));
-            Random rnd = new Random();
-            int randomInteger = rnd.Next(2, selectionRows.Count);
-            //IWebElement selection = driver.FindElement(By.XPath("/html/body/div[8]/div/div["+randomInteger.ToString()+"]"));
-            //selection.SendKeys(Keys.Control); 
-            //selection.Click();
-            Thread.Sleep(1000);
-            //selectionRows[randomInteger].SendKeys(Keys.Control);
-            //selectionRows[randomInteger].SendKeys("");
-            selectionRows[randomInteger].SendKeys(Keys.Space);
-            //selectionRows[randomInteger].Submit();
-            selectionRows[randomInteger].Click();
+            IList<IWebElement> comboItems = driver.FindElements(By.CssSelector(".x-combo-list[style*='visibility: visible;'] .x-combo-list-item"));
+            comboItems.First(item => item.Text.Trim() == target).Click();
         }
         public InvoicesPage clickSave()
         {
@@ -167,26 +153,6 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
             return _InvoicesPage;
         }
 
-        public void DatePicker(string idElement)
-        {
-            //DateFormat dateFormat2 = new SimpleDateFormat("dd"); 
-            //Date date2 = new Date();
-
-            //String strToday = dateFormat2.format(date2); 
-            //int temptoday = Integer.parseInt(strToday); 
-            //String today =  String.valueOf(temptoday).toString();
-
-            ////find the calendar
-            //WebElement dateWidget = driver.findElement(By.id("dp-calendar"));  
-            //List<WebElement> columns=dateWidget.findElements(By.tagName("td"));  
-
-            ////comparing the text of cell with today's date and clicking it.
-            //for (WebElement cell : columns) {
-            //if (cell.getText().equals(today)) {
-            //cell.click();
-            //break;
-            //}
-        }
         public void setDueDate(string dueDate)
         {
             dueDateDay.SendKeys(dueDate);

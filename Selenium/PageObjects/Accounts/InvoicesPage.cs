@@ -75,13 +75,27 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
             ReadOnlyCollection<IWebElement> invoicesTable = driver.FindElements(By.XPath("//table[@id='ext-gen48']/tbody"));
             return invoicesTable;
         }
-        //public List<IWebElement> getInvoiceTable()
-        //{
-        //    List<IWebElement> textfields = new List<IWebElement>();
+        public void SelectInvoice(int nr)
+        {
+            IWebElement selectelement = driver.FindElement(By.XPath("//table[@id='ext-gen48']/tbody/tr["+nr+"]/td[1]"));
+            selectelement.Click();
+        }
+        public void ClickDelete()
+        {
+            deleteButton.Click();
+            foreach (string handle in WebBrowser.Current.WindowHandles)
+            {
+                IWebDriver popup = driver.SwitchTo().Window(handle);
 
-        //    var table = driver.FindElements(By.XPath("//table[@id='highVolumeSearchResults_group']//tr/td"));
-        //    return table.ToList();
+                //if (popup.Title.Contains("popup title"))
+                if (popup.FindElement(By.Id("ext-gen117"))!= null)
+                {
+                    break;
+                }
+            }
 
-        //}
+            IWebElement okButton = driver.FindElement(By.Id("ext-gen121"));
+            okButton.Click();
+        }
     }
 }
