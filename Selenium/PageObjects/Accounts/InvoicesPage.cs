@@ -87,14 +87,13 @@ namespace Xero_testing.Selenium.PageObjects.Accounts
             {
                 IWebDriver popup = driver.SwitchTo().Window(handle);
 
-                //if (popup.Title.Contains("popup title"))
-                if (popup.FindElement(By.Id("ext-gen117"))!= null)
+                if (popup.FindElement(By.Id("ext-gen91"))!= null)
                 {
                     break;
                 }
             }
 
-            IWebElement okButton = driver.FindElement(By.Id("ext-gen121"));
+            IWebElement okButton = driver.FindElement(By.XPath("//div[@id='create02']/a"));
             okButton.Click();
         }
     }

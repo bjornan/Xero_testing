@@ -45,7 +45,6 @@ namespace Xero_testing.Selenium.PageObjects
         public void WaitForTitle(string title)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeout));
-            //var titleOfPage = driver.Title;
             string existingWindowHandle = driver.CurrentWindowHandle;
             string popupHandle = string.Empty;
             ReadOnlyCollection<string> windowHandles = driver.WindowHandles;
@@ -75,8 +74,7 @@ namespace Xero_testing.Selenium.PageObjects
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeout));
             wait.Until(ElementIsClickable(By.Id("id")));
-            //wait.Until(d => d.FindElement(By.Id(id)));
-            //wait.Until(ExpectedConditions.elementToBeClickable(ById("element"));
+   
         }
         protected void clickOptionInList(string listControlId, string optionText)
         {

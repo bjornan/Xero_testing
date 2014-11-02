@@ -85,17 +85,15 @@ namespace Xero_testing.BDDTests
                     hrefString = cells[1].GetAttribute("href");
                     invoicePage.SelectInvoice(i);
                 }
-                foreach (IWebElement cell in cells)
-                {
-                    Console.WriteLine("\t" + cell.Text);
-                }
+           
             }
             Assert.IsTrue(found, "Couldn't find the object");
-            //href="/RepeatTransactions/Edit.aspx?invoiceID=30997468-1b95-4948-891b-1766cfd94fec
+            
             if(hrefString != null)
             {
                 int start = hrefString.IndexOf("=");
                 invoiceId = hrefString.Substring(start + 1, hrefString.Length);
+                string requestAddress = "https://api.xero.com/api.xro/2.0/repeatinginvoices/" + invoiceId;
             //TODO: Call api with the invoice id....
             }
             
